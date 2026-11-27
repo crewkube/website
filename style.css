@@ -95,3 +95,7 @@ code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
 .roadmap span { color: var(--muted); }
 
 .footer { border-top: 1px solid var(--line); padding-top: 24px; padding-bottom: 40px; color: var(--muted); font-size: 15px; }
+
+.legal h1 { font-size: 36px; }
+.legal h2 { font-size: 22px; margin-top: 40px; }
+.footer p { margin: 0 0 8px; }
