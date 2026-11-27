@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crewkube: Kubernetes-native AI agents</title>
+  <meta name="description" content="Open-source, Kubernetes-native framework for defining, deploying, and connecting task-focused AI agents.">
+  <meta property="og:title" content="Crewkube">
+  <meta property="og:description" content="Define, deploy, and connect task-focused AI agents on Kubernetes.">
+  <meta property="og:image" content="https://crewkube.com/icon-256.png">
+  <link rel="icon" type="image/png" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="wrap nav">
+    <a class="brand" href="/">
+      <img src="icon-256.png" alt="" width="32" height="32">
+      <span><span class="crew">crew</span><span class="kube">kube</span></span>
+    </a>
+    <nav>
+      <a href="#why">Why</a>
+      <a href="#look">Example</a>
+      <a href="#concepts">Concepts</a>
+      <a href="#roadmap">Roadmap</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <p class="badge">Design phase · Apache 2.0</p>
+      <h1>AI agents as Kubernetes workloads with a typed contract</h1>
+      <p class="lead">Crewkube is an open-source framework for defining, deploying, and connecting task-focused AI agents. Start with one agent, grow into a multi-agent application, and deploy and scale each agent independently, alongside the microservices and workflow engines you already run.</p>
+    </section>
+
+    <section id="why" class="wrap">
+      <h2>Why Crewkube</h2>
+      <p>Most agent frameworks are libraries: the agent lives inside one process, and deploying, securing, and scaling it is left to you. Crewkube makes each agent a Kubernetes resource.</p>
+      <div class="grid">
+        <article><h3>Declarative</h3><p>An agent is a YAML resource. Review it in a pull request, deploy it with GitOps, roll it back like any Deployment.</p></article>
+        <article><h3>Independently deployable</h3><p>Every agent has its own Pod, Service, identity, and scaling. Change one agent and only that agent rolls out.</p></article>
+        <article><h3>Callable like a service</h3><p>Agents expose named, versioned interfaces that services, CronJobs, CI pipelines, and workflow engines call over plain HTTP.</p></article>
+        <article><h3>Explicit about access</h3><p>An agent can only call the tools and peer agents it declares, and each destination decides who may call it.</p></article>
+        <article><h3>Harness-agnostic</h3><p>Bring the agent runtime you prefer. Any runner image that implements the runtime contract works; your callers see the same API.</p></article>
+        <article><h3>Additive</h3><p>Agents sit next to your microservices, MCP tool servers, and workflow engines. Nothing has to be rewritten.</p></article>
+      </div>
+    </section>
+
+    <section id="look" class="wrap">
+      <h2>A quick look</h2>
+      <p class="note">Illustrative only. The API is a draft and not yet implemented.</p>
+<pre><code>apiVersion: crewkube.com/v1alpha1
+kind: Agent
+metadata:
+  name: triage
+spec:
+  instructions: |
+    Classify incidents and recommend next steps.
+  harness:
+    adapter: claude-code
+    image: registry.example.com/crewkube/claude-triage:0.1.0
+  interfaces:
+    - name: classify
+      version: v1
+      allowedCallers:
+        - serviceAccount: incident-api
+  tools:
+    - name: summarizeLogs
+      target:
+        agent: { name: log-summary, interface: summarize }</code></pre>
+<pre><code>kubectl apply -f triage.yaml
+curl -X POST http://triage/v1/interfaces/classify -d '{"input": {...}}'</code></pre>
+    </section>
+
+    <section id="concepts" class="wrap">
+      <h2>Core concepts</h2>
+      <dl class="concepts">
+        <dt>Agent</dt><dd>One deployable agent: instructions, model, harness, interfaces, tools, policy, workload.</dd>
+        <dt>Application</dt><dd>Optional grouping of agents with aggregate status.</dd>
+        <dt>Interface</dt><dd>A named, versioned operation an agent offers to callers.</dd>
+        <dt>Tool</dt><dd>An operation an agent may use: a peer agent, an HTTP service, an MCP tool, or a local handler.</dd>
+        <dt>Harness</dt><dd>The runtime that executes the agent loop, packaged as a runner image.</dd>
+        <dt>Runtime contract</dt><dd>The versioned HTTP contract every harness implements. It makes harnesses interchangeable.</dd>
+      </dl>
+      <p><strong>Agents decide, workflows order.</strong> Crewkube does not replace workflow engines. When steps must run in a fixed order, with approvals or durable retries, use a workflow engine and have it call agent interfaces.</p>
+    </section>
+
+    <section id="roadmap" class="wrap">
+      <h2>Roadmap</h2>
+      <ol class="roadmap">
+        <li class="now"><strong>Design</strong> <span>Accept the architecture and runtime contract proposals.</span></li>
+        <li><strong>v0.1</strong> <span>Operator, <code>Agent</code> CRD, reference harness: a single callable agent.</span></li>
+        <li><strong>v0.2</strong> <span>Multi-agent: peer calls, MCP tools, caller authorization, Helm chart.</span></li>
+        <li><strong>v0.3</strong> <span>Second harness passing the runtime contract tests; workflow engine example.</span></li>
+        <li><strong>v1beta1</strong> <span>Stable API with a compatibility guarantee.</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Crewkube is open source under the Apache License 2.0. Source code will be published with the first release.</p>
+  </footer>
+</body>
+</html>
