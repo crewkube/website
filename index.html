@@ -35,14 +35,14 @@
 
     <section id="why" class="wrap">
       <h2>Why Crewkube</h2>
-      <p>Most agent frameworks are libraries: the agent lives inside one process, and deploying, securing, and scaling it is left to you. Crewkube makes each agent a Kubernetes resource.</p>
+      <p>Most agent frameworks are libraries or platforms of their own: the agent lives inside one process or a special runtime, and integrating, securing, and operating it is left to you. Crewkube makes each agent an ordinary Kubernetes service with a typed contract.</p>
       <div class="grid">
-        <article><h3>Declarative</h3><p>An agent is a YAML resource. Review it in a pull request, deploy it with GitOps, roll it back like any Deployment.</p></article>
-        <article><h3>Independently deployable</h3><p>Every agent has its own Pod, Service, identity, and scaling. Change one agent and only that agent rolls out.</p></article>
-        <article><h3>Callable like a service</h3><p>Agents expose named, versioned interfaces that services, CronJobs, CI pipelines, and workflow engines call over plain HTTP.</p></article>
-        <article><h3>Explicit about access</h3><p>An agent can only call the tools and peer agents it declares, and each destination decides who may call it.</p></article>
+        <article><h3>Callable like any microservice</h3><p>Agents speak plain HTTP and JSON. Your services, CronJobs, CI pipelines, and workflow engines call them like any other API, with no agent protocol or SDK required.</p></article>
+        <article><h3>Typed contracts</h3><p>Every interface is named and versioned, with input and output schemas, whichever harness runs the agent. Callers get predictable data, not free-form text.</p></article>
+        <article><h3>Plain Kubernetes</h3><p>Each agent is a regular Deployment and Service with its own identity and scaling. No extra runtime layer or sandbox platform to install and operate.</p></article>
+        <article><h3>Secure by default</h3><p>Every agent has its own identity. Callers must be explicitly allowed, and an agent can only reach the tools and peers it declares. Nothing is open by default.</p></article>
         <article><h3>Harness-agnostic</h3><p>Bring the agent runtime you prefer. Any runner image that implements the runtime contract works; your callers see the same API.</p></article>
-        <article><h3>Additive</h3><p>Agents sit next to your microservices, MCP tool servers, and workflow engines. Nothing has to be rewritten.</p></article>
+        <article><h3>GitOps-ready</h3><p>An agent is a YAML resource. Review it in a pull request, deploy it with GitOps, and roll it back like any Deployment.</p></article>
       </div>
     </section>
 
@@ -99,7 +99,7 @@ curl -X POST http://triage/v1/interfaces/classify -d '{"input": {...}}'</code></
 
   <footer class="wrap footer">
     <p>Crewkube is open source under the Apache License 2.0. Source code will be published with the first release.</p>
-    <p><a href="impressum.html">Impressum / Legal notice</a></p>
+    <p><a href="impressum.html">Impressum / Legal notice</a> · <a href="datenschutz.html">Datenschutz / Privacy</a></p>
   </footer>
 </body>
 </html>
